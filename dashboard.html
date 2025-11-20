@@ -2,14 +2,15 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>حجوزات صالون رجالي</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حجوزات صالون رجالي</title>
+
 <style>
     body {
         font-family: Arial, sans-serif;
         margin: 0;
         background: #111;
-        color: white;
+        color: #fff;
         direction: rtl;
     }
 
@@ -41,4 +42,132 @@
     .service {
         background: #222;
         padding: 15px;
-        border-radiu
+        border-radius: 8px;
+        margin-bottom: 12px;
+        border: 1px solid #333;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .service:hover {
+        background: #333;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        border: none;
+        margin-top: 6px;
+        background: #333;
+        color: #fff;
+        font-size: 16px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        background: #d4a056;
+        color: black;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        margin-top: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #c79542;
+    }
+
+    .success {
+        text-align: center;
+        font-size: 20px;
+        margin-top: 20px;
+        padding: 12px;
+        background: #0f0;
+        color: black;
+        border-radius: 8px;
+        display: none;
+    }
+</style>
+</head>
+
+<body>
+
+<header>صالون النخبة الرجالي</header>
+
+<div class="container">
+
+    <h2>الخدمات</h2>
+
+    <div class="service" onclick="selectService('حلاقة عادية', 25)">💈 حلاقة عادية — 25 ريال</div>
+    <div class="service" onclick="selectService('حلاقة VIP', 50)">✨ حلاقة VIP — 50 ريال</div>
+    <div class="service" onclick="selectService('صبغة شعر', 40)">🎨 صبغة شعر — 40 ريال</div>
+    <div class="service" onclick="selectService('تنسيق لحية', 20)">🧔 تنسيق لحية — 20 ريال</div>
+    <div class="service" onclick="selectService('باقة كاملة', 90)">🔥 باقة كاملة — 90 ريال</div>
+
+    <h2>احجز موعدك</h2>
+
+    <label>الاسم</label>
+    <input type="text" id="name">
+
+    <label>رقم الجوال</label>
+    <input type="text" id="phone">
+
+    <label>الخدمة المختارة</label>
+    <input type="text" id="service" readonly placeholder="اختر خدمة من القائمة">
+
+    <label>التاريخ</label>
+    <input type="date" id="date">
+
+    <label>الوقت</label>
+    <select id="time">
+        <option value="">اختر الوقت</option>
+        <option>2:00 PM</option>
+        <option>3:00 PM</option>
+        <option>4:00 PM</option>
+        <option>5:00 PM</option>
+        <option>6:00 PM</option>
+        <option>7:00 PM</option>
+        <option>8:00 PM</option>
+    </select>
+
+    <button onclick="book()">تأكيد الحجز</button>
+
+    <div class="success" id="successMsg">تم تأكيد حجزك بنجاح! 💈</div>
+
+</div>
+
+<script>
+let selectedService = "";
+
+function selectService(name, price) {
+    selectedService = `${name} — ${price} ريال`;
+    document.getElementById("service").value = selectedService;
+}
+
+function book() {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const service = document.getElementById("service").value.trim();
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+
+    if (!name || !phone || !service || !date || !time) {
+        alert("الرجاء تعبئة جميع الحقول.");
+        return;
+    }
+
+    document.getElementById("successMsg").style.display = "block";
+
+    setTimeout(() => {
+        document.getElementById("successMsg").style.display = "none";
+    }, 4000);
+}
+</script>
+
+</body>
+</html>
