@@ -1,9 +1,149 @@
-<html>
+<!DOCTYPE html>
+<html lang="ar">
 <head>
-    <title>Customer Renewal Dashboard</title>
+<meta charset="UTF-8">
+<title>Dashboard تجديد العملاء</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    table {
+        width: 95%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background: #007BFF;
+        color: #fff;
+    }
+    tr:hover {
+        background: #f1f1f1;
+    }
+    input[type="number"] {
+        width: 60px;
+        padding: 5px;
+        text-align: center;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .progress-container {
+        width: 100%;
+        background: #ddd;
+        border-radius: 10px;
+        height: 20px;
+        overflow: hidden;
+    }
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        border-radius: 10px;
+        text-align: right;
+        padding-right: 5px;
+        color: white;
+        font-weight: bold;
+        line-height: 20px;
+        transition: width 0.5s, background 0.5s;
+    }
+</style>
 </head>
 <body>
-    <h1>Customer Renewal Dashboard</h1>
-    <p>This is the initial version of the dashboard for monitoring customer renewals.</p>
+
+<h1>Dashboard تجديد العملاء - الهدف 40%</h1>
+
+<table id="dashboard">
+    <thead>
+        <tr>
+            <th>الموظف</th>
+            <th>عدد العملاء الحالي</th>
+            <th>العملاء الجدد</th>
+            <th>المطلوب لتجديد 40%</th>
+            <th>تبقى لتحقيق الهدف</th>
+            <th>نسبة الإنجاز</th>
+            <th>النسبة الحالية من التوتال</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- سيتم ملء البيانات بالـ JavaScript -->
+    </tbody>
+</table>
+
+<script>
+let employees = [
+    {name: "محمد العنزي", total: 115, new: 30},
+    {name: "راكان الرميد", total: 112, new: 23},
+    {name: "عبدالعزيز العباد", total: 114, new: 21},
+    {name: "وليد الحربي", total: 113, new: 25},
+    {name: "نايف", total: 111, new: 24},
+];
+
+const tbody = document.querySelector("#dashboard tbody");
+
+function renderTable() {
+    tbody.innerHTML = "";
+
+    // تحديث بيانات الهدف والنسبة
+    employees.forEach(emp => {
+        emp.target = Math.ceil(emp.total * 0.40);
+        emp.remaining = Math.max(emp.target - emp.new, 0);
+        emp.progressPercent = Math.min((emp.new / emp.target) * 100, 100);
+        emp.currentPercent = ((emp.new / emp.total) * 100).toFixed(1);
+    });
+
+    // ترتيب الموظفين حسب نسبة الإنجاز للهدف
+    employees.sort((a, b) => b.progressPercent - a.progressPercent);
+
+    employees.forEach((emp, index) => {
+        let color;
+        if(emp.progressPercent < 50) color = "red";
+        else if(emp.progressPercent < 80) color = "orange";
+        else color = "green";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${emp.name}</td>
+            <td>${emp.total}</td>
+            <td><input type="number" min="0" value="${emp.new}" data-index="${index}"></td>
+            <td>${emp.target}</td>
+            <td>${emp.remaining}</td>
+            <td>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: ${emp.progressPercent}%; background: ${color}">
+                        ${emp.progressPercent.toFixed(0)}%
+                    </div>
+                </div>
+            </td>
+            <td>${emp.currentPercent}%</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // إضافة مستمع لكل حقل الإدخال
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('input', (e) => {
+            const idx = e.target.dataset.index;
+            employees[idx].new = parseInt(e.target.value) || 0;
+            renderTable(); // إعادة رسم الجدول عند تغيير الرقم
+        });
+    });
+}
+
+// عرض الجدول لأول مرة
+renderTable();
+</script>
+
 </body>
 </html>
