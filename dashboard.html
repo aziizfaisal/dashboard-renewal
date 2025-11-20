@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>حجوزات صالون رجالي</title>
-
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -14,14 +13,32 @@
         direction: rtl;
     }
 
+    /* هيدر مع شعار كلاسيكي */
     header {
-        background: #222;
-        padding: 20px;
-        text-align: center;
-        font-size: 28px;
-        font-weight: bold;
-        border-bottom: 3px solid #d4a056;
+        background:#222; 
+        padding:20px; 
+        text-align:center; 
+        position:relative; 
+        border-bottom:3px solid #d4a056;
     }
+    header .logo {
+        display:inline-block; 
+        position:relative; 
+        color:#d4a056; 
+        font-size:28px; 
+        font-weight:bold;
+    }
+    header .logo span.icon {
+        display:block; 
+        font-size:50px;
+    }
+    header .logo span.left-icon, header .logo span.right-icon {
+        position:absolute; 
+        top:0; 
+        font-size:40px;
+    }
+    header .logo span.left-icon { left:-60px; }
+    header .logo span.right-icon { right:-60px; }
 
     .container {
         width: 90%;
@@ -48,10 +65,7 @@
         cursor: pointer;
         transition: 0.3s;
     }
-
-    .service:hover {
-        background: #333;
-    }
+    .service:hover { background: #333; }
 
     input, select {
         width: 100%;
@@ -77,10 +91,7 @@
         font-weight: bold;
         transition: 0.3s;
     }
-
-    button:hover {
-        background: #c79542;
-    }
+    button:hover { background: #c79542; }
 
     .success {
         text-align: center;
@@ -94,10 +105,16 @@
     }
 </style>
 </head>
-
 <body>
 
-<header>صالون النخبة الرجالي</header>
+<header>
+    <div class="logo">
+        <span class="icon">💈</span>
+        صالون النخبة الرجالي
+        <span class="left-icon">✂️</span>
+        <span class="right-icon">🪒</span>
+    </div>
+</header>
 
 <div class="container">
 
@@ -141,8 +158,16 @@
 
 </div>
 
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <script>
+emailjs.init("JUgXTktPdJchfe-PS");  // Public Key
+
 let selectedService = "";
+
+// تخزين المواعيد لمنع التكرار
+let bookedAppointments = JSON.parse(localStorage.getItem("bookedAppointments") || "[]");
 
 function selectService(name, price) {
     selectedService = `${name} — ${price} ريال`;
@@ -161,11 +186,32 @@ function book() {
         return;
     }
 
-    document.getElementById("successMsg").style.display = "block";
+    // تحقق من تكرار الموعد
+    const exists = bookedAppointments.some(app => app.date === date && app.time === time);
+    if (exists) {
+        alert("هذا الموعد محجوز مسبقاً، يرجى اختيار وقت آخر.");
+        return;
+    }
 
-    setTimeout(() => {
-        document.getElementById("successMsg").style.display = "none";
-    }, 4000);
+    // إضافة الموعد لمنع التكرار
+    bookedAppointments.push({date, time});
+    localStorage.setItem("bookedAppointments", JSON.stringify(bookedAppointments));
+
+    // إرسال الإيميل
+    emailjs.send("service_e73lp4a", "template_p39rn1c", {
+        name: name,
+        phone: phone,
+        service: service,
+        date: date,
+        time: time
+    }).then(function() {
+        document.getElementById("successMsg").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("successMsg").style.display = "none";
+        }, 4000);
+    }, function(error) {
+        alert("تعذر إرسال الإيميل: " + JSON.stringify(error));
+    });
 }
 </script>
 
