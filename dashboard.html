@@ -65,6 +65,38 @@
         margin-top: 40px;
         margin-bottom: 10px;
         direction: rtl;
+        cursor: pointer;
+        user-select: none;
+    }
+    .hidden {
+        display: none;
+    }
+    .password-box {
+        text-align: center;
+        margin: 10px auto;
+    }
+    .password-box input[type="password"] {
+        padding: 5px;
+        font-size: 15px;
+        width: 90px;
+        text-align: center;
+        border-radius: 5px;
+        border: 1px solid #bbb;
+    }
+    .password-box button {
+        margin-right: 8px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 15px;
+        border: none;
+        background: #007BFF;
+        color: #fff;
+        cursor: pointer;
+    }
+    .error-msg {
+        color: red;
+        font-size: 13px;
+        margin-top: 4px;
     }
 </style>
 </head>
@@ -81,7 +113,7 @@
             <th>المطلوب لتجديد 40%</th>
             <th>تبقى لتحقيق الهدف</th>
             <th>نسبة الإنجاز</th>
-            <th>النسبة الحالية من التوتال</th>
+            <th>النسبة الحالية</th>
         </tr>
     </thead>
     <tbody>
@@ -89,7 +121,17 @@
     </tbody>
 </table>
 
-<div class="footer">
+<div id="password-container" class="hidden">
+    <div class="password-box">
+        <label for="password-input">أدخل الرقم السري:</label>
+        <input type="password" id="password-input" maxlength="8" autocomplete="off">
+        <button id="password-ok">تفعيل التعديل</button>
+        <button id="password-cancel">إلغاء</button>
+        <div class="error-msg" id="password-error"></div>
+    </div>
+</div>
+
+<div class="footer" id="footer">
     جميع الحقوق محفوظة عبدالعزيز العباد
 </div>
 
@@ -102,7 +144,15 @@ let employees = [
     {name: "نايف", total: 111, new: 24},
 ];
 
+let canEdit = false; // هل المستخدم فعّل التعديل؟
+
 const tbody = document.querySelector("#dashboard tbody");
+const footer = document.getElementById("footer");
+const passwordContainer = document.getElementById("password-container");
+const passwordInput = document.getElementById("password-input");
+const passwordOk = document.getElementById("password-ok");
+const passwordCancel = document.getElementById("password-cancel");
+const passwordError = document.getElementById("password-error");
 
 function renderTable() {
     tbody.innerHTML = "";
@@ -122,11 +172,16 @@ function renderTable() {
         else if(emp.progressPercent < 80) color = "orange";
         else color = "green";
 
+        // إذا عنده صلاحية تظهر input، غير ذلك رقم ثابت فقط
+        const newInput = canEdit
+            ? `<input type="number" min="0" value="${emp.new}" data-index="${index}">`
+            : `<span>${emp.new}</span>`;
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${emp.name}</td>
             <td>${emp.total}</td>
-            <td><input type="number" min="0" value="${emp.new}" data-index="${index}"></td>
+            <td>${newInput}</td>
             <td>${emp.target}</td>
             <td>${emp.remaining}</td>
             <td>
@@ -141,14 +196,46 @@ function renderTable() {
         tbody.appendChild(tr);
     });
 
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('input', (e) => {
-            const idx = e.target.dataset.index;
-            employees[idx].new = parseInt(e.target.value) || 0;
-            renderTable();
+    // كود تعديل الرقم فقط إذا عنده صلاحية
+    if(canEdit) {
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = e.target.dataset.index;
+                employees[idx].new = parseInt(e.target.value) || 0;
+                renderTable();
+            });
         });
-    });
+    }
 }
+
+// عند الضغط على الحقوق يظهر مربع الرقم السري
+footer.onclick = function() {
+    passwordContainer.classList.remove("hidden");
+    passwordInput.value = '';
+    passwordError.textContent = '';
+    passwordInput.focus();
+};
+// زر إلغاء لإخفاء مربع الرقم السري
+passwordCancel.onclick = function() {
+    passwordContainer.classList.add("hidden");
+    passwordError.textContent = '';
+};
+// زر الموافقة على الرقم السري
+passwordOk.onclick = function() {
+    if(passwordInput.value === "1234" || passwordInput.value === "۱۲۳۴" || passwordInput.value === "١٢٣٤") {
+        canEdit = true;
+        passwordContainer.classList.add("hidden");
+        renderTable();
+    } else {
+        passwordError.textContent = 'رقم سري غير صحيح!';
+        passwordInput.value = '';
+        passwordInput.focus();
+    }
+};
+// السماح بالضغط Enter في مربع الرقم السري
+passwordInput.onkeydown = function(e) {
+    if(e.key === "Enter") passwordOk.click();
+};
 
 renderTable();
 </script>
