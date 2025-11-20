@@ -14,24 +14,6 @@
         text-align: center;
         color: #333;
     }
-    .input-area {
-        width: 95%;
-        margin: 0 auto 20px auto;
-        text-align: center;
-    }
-    .input-area label {
-        font-weight: bold;
-        margin-left: 10px;
-    }
-    .input-area input[type="text"] {
-        width: 180px;
-        padding: 7px;
-        font-size: 1em;
-        margin-left: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        text-align: center;
-    }
     table {
         width: 95%;
         margin: 20px auto;
@@ -76,31 +58,19 @@
         line-height: 20px;
         transition: width 0.5s, background 0.5s;
     }
-    .bestOne {
-        color: green;
-        font-weight: bold;
-        font-size: 18px;
-    }
-    .worstOne {
-        color: #af1c1c;
-        font-weight: bold;
-        font-size: 18px;
-    }
-    .dangerOne {
-        color: orange;
-        font-weight: bold;
-        font-size: 18px;
+    .footer {
+        text-align: center;
+        font-size: 13px;
+        color: #888;
+        margin-top: 40px;
+        margin-bottom: 10px;
+        direction: rtl;
     }
 </style>
 </head>
 <body>
 
 <h1>Dashboard تجديد العملاء - الهدف 40%</h1>
-
-<div class="input-area">
-    <label for="first-name">اسم الأول (اكتب بالأرقام أو الحروف):</label>
-    <input type="text" id="first-name" value="محمد العنزي">
-</div>
 
 <table id="dashboard">
     <thead>
@@ -112,15 +82,16 @@
             <th>تبقى لتحقيق الهدف</th>
             <th>نسبة الإنجاز</th>
             <th>النسبة الحالية من التوتال</th>
-            <th>أفضل واحد</th>
-            <th>في خطر</th>
-            <th>سيء</th>
         </tr>
     </thead>
     <tbody>
         <!-- سيتم ملء البيانات بالـ JavaScript -->
     </tbody>
 </table>
+
+<div class="footer">
+    جميع الحقوق محفوظة عبدالعزيز العباد
+</div>
 
 <script>
 let employees = [
@@ -132,12 +103,6 @@ let employees = [
 ];
 
 const tbody = document.querySelector("#dashboard tbody");
-const firstNameInput = document.getElementById("first-name");
-
-firstNameInput.addEventListener("input", () => {
-    employees[0].name = firstNameInput.value;
-    renderTable();
-});
 
 function renderTable() {
     tbody.innerHTML = "";
@@ -149,39 +114,13 @@ function renderTable() {
         emp.currentPercent = ((emp.new / emp.total) * 100).toFixed(1);
     });
 
-    // ترتيب الموظفين حسب نسبة الإنجاز للهدف
     employees.sort((a, b) => b.progressPercent - a.progressPercent);
-
-    // تحديد أفضل واحد (أعلى progressPercent)
-    let bestIndex = 0;
-    let maxProgress = employees[0].progressPercent;
-    for(let i=1; i<employees.length; i++) {
-        if(employees[i].progressPercent > maxProgress) {
-            maxProgress = employees[i].progressPercent;
-            bestIndex = i;
-        }
-    }
-    // تحديد أسوأ واحد (أقل progressPercent)
-    let worstIndex = 0;
-    let minProgress = employees[0].progressPercent;
-    for(let i=1; i<employees.length; i++) {
-        if(employees[i].progressPercent < minProgress) {
-            minProgress = employees[i].progressPercent;
-            worstIndex = i;
-        }
-    }
-    // تحديد "في خطر" (قبل الأخير)
-    let dangerIndex = (employees.length > 2) ? employees.length - 2 : null;
 
     employees.forEach((emp, index) => {
         let color;
         if(emp.progressPercent < 50) color = "red";
         else if(emp.progressPercent < 80) color = "orange";
         else color = "green";
-
-        const bestOne = (index === bestIndex) ? '<span class="bestOne">✔ الأفضل</span>' : '';
-        const dangerOne = (index === dangerIndex) ? '<span class="dangerOne">⚠️ في خطر</span>' : '';
-        const worstOne = (index === worstIndex) ? '<span class="worstOne">🛑 سيء</span>' : '';
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -198,9 +137,6 @@ function renderTable() {
                 </div>
             </td>
             <td>${emp.currentPercent}%</td>
-            <td>${bestOne}</td>
-            <td>${dangerOne}</td>
-            <td>${worstOne}</td>
         `;
         tbody.appendChild(tr);
     });
