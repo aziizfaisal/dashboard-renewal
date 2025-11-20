@@ -55,7 +55,7 @@ const firebaseConfig = {
   projectId: "salonbookingdashboard",
   storageBucket: "salonbookingdashboard.appspot.com",
   messagingSenderId: "38824070536",
-  appId: "1:38824070536:web:f01a0987a826f836a73e3d"
+  appId: "1:38824070536:web:fff486776f347333a73e3d"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -64,6 +64,7 @@ const db = getDatabase(app);
 // EmailJS init
 emailjs.init("JUgXTktPdJchfe-PS");
 
+// منع تكرار المواعيد باستخدام localStorage
 let bookedAppointments = JSON.parse(localStorage.getItem("bookedAppointments") || "[]");
 
 document.getElementById("bookBtn").addEventListener("click", () => {
@@ -75,18 +76,17 @@ document.getElementById("bookBtn").addEventListener("click", () => {
 
     if (!name || !phone || !service || !date || !time) { alert("الرجاء تعبئة جميع الحقول."); return; }
 
-    // منع تكرار المواعيد
     const exists = bookedAppointments.some(app => app.date === date && app.time === time);
     if (exists) { alert("هذا الموعد محجوز مسبقاً."); return; }
 
     bookedAppointments.push({date, time});
     localStorage.setItem("bookedAppointments", JSON.stringify(bookedAppointments));
 
-    // حفظ الحجز في Firebase
+    // إضافة الحجز في Firebase
     const bookingsRef = ref(db, 'bookings');
     push(bookingsRef, {name, phone, service, date, time});
 
-    // إرسال بريد
+    // إرسال البريد
     emailjs.send("service_e73lp4a", "template_p39rn1c", {name, phone, service, date, time})
         .then(() => { 
             document.getElementById("successMsg").style.display = "block"; 
