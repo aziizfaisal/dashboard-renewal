@@ -1,170 +1,44 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard تجديد العملاء</title>
-  <style>
-    body {font-family: Arial,sans-serif;background:#f4f4f4;margin:0;padding:20px;}
-    h1{text-align:center;color:#333;}
-    table{width:95%;margin:20px auto;border-collapse:collapse;background:#fff;box-shadow:0 0 10px rgba(0,0,0,0.1);}
-    th,td{padding:12px 15px;text-align:center;border-bottom:1px solid #ddd;}
-    th{background:#007BFF;color:#fff;}
-    tr:hover{background:#f1f1f1;}
-    input[type="number"]{width:60px;padding:5px;text-align:center;border-radius:5px;border:1px solid #ccc;}
-    .progress-container{width:100%;background:#ddd;border-radius:10px;height:20px;overflow:hidden;}
-    .progress-bar{height:100%;width:0%;border-radius:10px;text-align:right;padding-right:5px;color:white;font-weight:bold;line-height:20px;transition:width 0.5s,background 0.5s;}
-    .footer{text-align:center;font-size:13px;color:#888;margin-top:40px;margin-bottom:10px;direction:rtl;cursor:pointer;user-select:none;}
-    .hidden{display:none;}
-    .password-box{text-align:center;margin:10px auto;}
-    .password-box input[type="password"]{padding:5px;font-size:15px;width:90px;text-align:center;border-radius:5px;border:1px solid #bbb;}
-    .password-box button{margin-right:8px;padding:5px 10px;border-radius:5px;font-size:15px;border:none;background:#007BFF;color:#fff;cursor:pointer;}
-    .error-msg{color:red;font-size:13px;margin-top:4px;}
-  </style>
-</head>
-<body>
-<h1>Dashboard تجديد العملاء - الهدف 40%</h1>
-<table id="dashboard">
-  <thead>
-    <tr>
-      <th>الموظف</th>
-      <th>عدد العملاء الحالي</th>
-      <th>العملاء الجدد</th>
-      <th>المطلوب لتجديد 40%</th>
-      <th>تبقى لتحقيق الهدف</th>
-      <th>نسبة الإنجاز</th>
-      <th>النسبة الحالية</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- سيتم ملء البيانات بالـ JavaScript -->
-  </tbody>
-</table>
-<div id="password-container" class="hidden">
-  <div class="password-box">
-    <label for="password-input">أدخل الرقم السري:</label>
-    <input type="password" id="password-input" maxlength="8" autocomplete="off">
-    <button id="password-ok">تفعيل التعديل</button>
-    <button id="password-cancel">إلغاء</button>
-    <div class="error-msg" id="password-error"></div>
-  </div>
-</div>
-<div class="footer" id="footer">
-  جميع الحقوق محفوظة عبدالعزيز العباد
-</div>
-<script>
-let employees = [
-    {name: "محمد العنزي", total: 115, new: 30},
-    {name: "راكان الرميد", total: 112, new: 23},
-    {name: "عبدالعزيز العباد", total: 114, new: 21},
-    {name: "وليد الحربي", total: 113, new: 25},
-    {name: "نايف", total: 111, new: 24},
-];
-let canEdit = false;
-
-// استرجع القيم من LocalStorage
-const saved = localStorage.getItem('dashboard_employees');
-if(saved){
-    try{
-        let parsed = JSON.parse(saved);
-        if(Array.isArray(parsed) && parsed.length === employees.length){
-            employees.forEach((emp,idx) => {
-                if(typeof parsed[idx].new === 'number'){
-                    emp.new = parsed[idx].new;
-                }
-            });
-        }
-    }catch(e){}
-}
-function saveEmployees(){
-    localStorage.setItem('dashboard_employees', JSON.stringify(
-        employees.map(e => ({new: e.new}))
-    ));
-}
-
-const tbody = document.querySelector("#dashboard tbody");
-const footer = document.getElementById("footer");
-const passwordContainer = document.getElementById("password-container");
-const passwordInput = document.getElementById("password-input");
-const passwordOk = document.getElementById("password-ok");
-const passwordCancel = document.getElementById("password-cancel");
-const passwordError = document.getElementById("password-error");
-
-function renderTable() {
-    tbody.innerHTML = "";
-    employees.forEach(emp => {
-        emp.target = Math.ceil(emp.total * 0.40);
-        emp.remaining = Math.max(emp.target - emp.new, 0);
-        emp.progressPercent = Math.min((emp.new / emp.target) * 100, 100);
-        emp.currentPercent = ((emp.new / emp.total) * 100).toFixed(1);
-    });
-    employees.sort((a, b) => b.progressPercent - a.progressPercent);
-
-    employees.forEach((emp, index) => {
-        let color;
-        if(emp.progressPercent < 50) color = "red";
-        else if(emp.progressPercent < 80) color = "orange";
-        else color = "green";
-
-        const newInput = canEdit
-            ? `<input type="number" min="0" value="${emp.new}" data-index="${index}">`
-            : `<span>${emp.new}</span>`;
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${emp.name}</td>
-            <td>${emp.total}</td>
-            <td>${newInput}</td>
-            <td>${emp.target}</td>
-            <td>${emp.remaining}</td>
-            <td>
-                <div class="progress-container">
-                    <div class="progress-bar" style="width: ${emp.progressPercent}%; background: ${color}">
-                        ${emp.progressPercent.toFixed(0)}%
-                    </div>
-                </div>
-            </td>
-            <td>${emp.currentPercent}%</td>
-        `;
-        tbody.appendChild(tr);
-    });
-    if(canEdit){
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', (e) => {
-                const idx = e.target.dataset.index;
-                employees[idx].new = parseInt(e.target.value) || 0;
-                saveEmployees();
-                renderTable();
-            });
-        });
+<meta charset="UTF-8">
+<title>حجوزات صالون رجالي</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #111;
+        color: white;
+        direction: rtl;
     }
-}
-// عند الضغط على الحقوق يظهر مربع الرقم السري
-footer.onclick = function() {
-    passwordContainer.classList.remove("hidden");
-    passwordInput.value = '';
-    passwordError.textContent = '';
-    passwordInput.focus();
-};
-// زر إلغاء لإخفاء مربع الرقم السري
-passwordCancel.onclick = function() {
-    passwordContainer.classList.add("hidden");
-    passwordError.textContent = '';
-};
-// زر الموافقة على الرقم السري
-passwordOk.onclick = function() {
-    if(passwordInput.value === "1234" || passwordInput.value === "۱۲۳۴" || passwordInput.value === "١٢٣٤") {
-        canEdit = true;
-        passwordContainer.classList.add("hidden");
-        renderTable();
-    } else {
-        passwordError.textContent = 'رقم سري غير صحيح!';
-        passwordInput.value = '';
-        passwordInput.focus();
+
+    header {
+        background: #222;
+        padding: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        border-bottom: 3px solid #d4a056;
     }
-};
-passwordInput.onkeydown = function(e) {
-    if(e.key === "Enter") passwordOk.click();
-};
-renderTable();
-</script>
-</body>
-</html>
+
+    .container {
+        width: 90%;
+        margin: 30px auto;
+        max-width: 700px;
+        background: #1a1a1a;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #333;
+    }
+
+    h2 {
+        color: #d4a056;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .service {
+        background: #222;
+        padding: 15px;
+        border-radiu
