@@ -8,12 +8,12 @@
 body {
     font-family: Arial, sans-serif;
     margin:0;
-    background: #111;
+    background: linear-gradient(135deg, #1c1c1c, #333);
     color: #fff;
     direction: rtl;
 }
 header {
-    background: #222;
+    background: rgba(0,0,0,0.7);
     padding: 20px;
     text-align: center;
     border-bottom: 3px solid #d4a056;
@@ -26,10 +26,10 @@ header .logo {
 .container {
     max-width: 600px;
     margin: 30px auto;
-    background: #1a1a1a;
+    background: rgba(0,0,0,0.6);
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #333;
+    border: 1px solid #d4a056;
 }
 h2 {
     text-align: center;
@@ -37,34 +37,71 @@ h2 {
     margin-bottom: 20px;
 }
 input, select, button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 8px;
-    border-radius: 6px;
-    border: none;
-    font-size: 16px;
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    border-radius:6px;
+    border:none;
+    font-size:16px;
 }
 input, select {
-    background: #333;
-    color: #fff;
+    background:#333;
+    color:#fff;
 }
 button {
-    background: #d4a056;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
+    background:#d4a056;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
 }
 button:hover {
-    background: #c79542;
+    background:#c79542;
 }
-.success {
-    display: none;
-    text-align: center;
+
+/* Popup */
+.popup {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.7);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+.popup-content {
+    background:#111;
+    padding: 30px;
+    border-radius: 12px;
+    text-align:center;
+    border: 3px solid #d4a056;
+    max-width: 400px;
+}
+.popup.show {
+    visibility: visible;
+    opacity: 1;
+}
+.popup-content h3 {
+    margin:0 0 15px 0;
+    color:#d4a056;
+}
+.popup-content p {
+    color:#fff;
+    font-size:16px;
+}
+.popup-content button {
     margin-top: 20px;
-    padding: 12px;
-    background: #0f0;
-    color: black;
-    border-radius: 8px;
+    background:#d4a056;
+    color:black;
+    font-weight:bold;
+}
+.popup-content button:hover {
+    background:#c79542;
 }
 </style>
 </head>
@@ -98,15 +135,22 @@ button:hover {
 <label>الوقت</label>
 <select id="time">
     <option value="">اختر الوقت</option>
-    <!-- توليد الوقت من 8 صباحًا إلى 12 منتصف الليل -->
 </select>
 
 <button id="bookBtn">تأكيد الحجز</button>
-<div class="success" id="successMsg">تم تأكيد حجزك بنجاح! 💈</div>
+</div>
+
+<!-- Popup -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h3>تم الحجز بنجاح! 💈</h3>
+        <p>نحن بانتظارك في الموعد المحدد</p>
+        <button id="closePopup">إغلاق</button>
+    </div>
 </div>
 
 <script>
-// توليد الوقت من 8 صباحًا إلى 12 منتصف الليل (24 ساعة)
+// توليد الوقت من 8 صباحًا إلى 12 منتصف الليل
 const timeSelect = document.getElementById('time');
 for(let h=8; h<=24; h++) {
     let hour = h>12 ? h-12 : h;
@@ -116,6 +160,30 @@ for(let h=8; h<=24; h++) {
     option.textContent = `${hour}:00 ${period}`;
     timeSelect.appendChild(option);
 }
+
+// Popup
+const popup = document.getElementById('popup');
+const closePopup = document.getElementById('closePopup');
+
+document.getElementById('bookBtn').addEventListener('click', () => {
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const service = document.getElementById('service').value;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+
+    if(!name || !phone || !service || !date || !time) {
+        alert("الرجاء تعبئة جميع الحقول.");
+        return;
+    }
+
+    // إظهار popup عند نجاح الحجز
+    popup.classList.add('show');
+});
+
+closePopup.addEventListener('click', () => {
+    popup.classList.remove('show');
+});
 </script>
 
 </body>
