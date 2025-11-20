@@ -5,168 +5,70 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>حجوزات صالون رجالي</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background: #111;
-        color: #fff;
-        direction: rtl;
-    }
-
-    /* هيدر مع شعار كلاسيكي */
-    header {
-        background:#222; 
-        padding:20px; 
-        text-align:center; 
-        position:relative; 
-        border-bottom:3px solid #d4a056;
-    }
-    header .logo {
-        display:inline-block; 
-        position:relative; 
-        color:#d4a056; 
-        font-size:28px; 
-        font-weight:bold;
-    }
-    header .logo span.icon {
-        display:block; 
-        font-size:50px;
-    }
-    header .logo span.left-icon, header .logo span.right-icon {
-        position:absolute; 
-        top:0; 
-        font-size:40px;
-    }
-    header .logo span.left-icon { left:-60px; }
-    header .logo span.right-icon { right:-60px; }
-
-    .container {
-        width: 90%;
-        margin: 30px auto;
-        max-width: 700px;
-        background: #1a1a1a;
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid #333;
-    }
-
-    h2 {
-        color: #d4a056;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .service {
-        background: #222;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        border: 1px solid #333;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .service:hover { background: #333; }
-
-    input, select {
-        width: 100%;
-        padding: 12px;
-        border-radius: 6px;
-        border: none;
-        margin-top: 6px;
-        background: #333;
-        color: #fff;
-        font-size: 16px;
-    }
-
-    button {
-        width: 100%;
-        padding: 14px;
-        background: #d4a056;
-        color: black;
-        font-size: 18px;
-        border: none;
-        border-radius: 8px;
-        margin-top: 15px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    button:hover { background: #c79542; }
-
-    .success {
-        text-align: center;
-        font-size: 20px;
-        margin-top: 20px;
-        padding: 12px;
-        background: #0f0;
-        color: black;
-        border-radius: 8px;
-        display: none;
-    }
+body { font-family: Arial; margin:0; background:#111; color:#fff; direction:rtl; }
+header { background:#222; padding:20px; text-align:center; position:relative; border-bottom:3px solid #d4a056; }
+header .logo { display:inline-block; position:relative; color:#d4a056; font-size:28px; font-weight:bold; }
+header .logo span.icon { display:block; font-size:50px; }
+header .logo span.left-icon, header .logo span.right-icon { position:absolute; top:0; font-size:40px; }
+header .logo span.left-icon { left:-60px; }
+header .logo span.right-icon { right:-60px; }
+.container { width:90%; margin:30px auto; max-width:700px; background:#1a1a1a; padding:20px; border-radius:10px; border:1px solid #333; }
+h2 { color:#d4a056; text-align:center; margin-bottom:20px; }
+.service { background:#222; padding:15px; border-radius:8px; margin-bottom:12px; border:1px solid #333; cursor:pointer; transition:0.3s; }
+.service:hover { background:#333; }
+input, select { width:100%; padding:12px; border-radius:6px; border:none; margin-top:6px; background:#333; color:#fff; font-size:16px; }
+button { width:100%; padding:14px; background:#d4a056; color:black; font-size:18px; border:none; border-radius:8px; margin-top:15px; cursor:pointer; font-weight:bold; transition:0.3s; }
+button:hover { background:#c79542; }
+.success { text-align:center; font-size:20px; margin-top:20px; padding:12px; background:#0f0; color:black; border-radius:8px; display:none; }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">
-        <span class="icon">💈</span>
-        صالون النخبة الرجالي
-        <span class="left-icon">✂️</span>
-        <span class="right-icon">🪒</span>
-    </div>
+<div class="logo">
+<span class="icon">💈</span>
+صالون النخبة الرجالي
+<span class="left-icon">✂️</span>
+<span class="right-icon">🪒</span>
+</div>
 </header>
 
 <div class="container">
+<h2>الخدمات</h2>
+<div class="service" onclick="selectService('حلاقة عادية', 25)">💈 حلاقة عادية — 25 ريال</div>
+<div class="service" onclick="selectService('حلاقة VIP', 50)">✨ حلاقة VIP — 50 ريال</div>
+<div class="service" onclick="selectService('صبغة شعر', 40)">🎨 صبغة شعر — 40 ريال</div>
+<div class="service" onclick="selectService('تنسيق لحية', 20)">🧔 تنسيق لحية — 20 ريال</div>
+<div class="service" onclick="selectService('باقة كاملة', 90)">🔥 باقة كاملة — 90 ريال</div>
 
-    <h2>الخدمات</h2>
-
-    <div class="service" onclick="selectService('حلاقة عادية', 25)">💈 حلاقة عادية — 25 ريال</div>
-    <div class="service" onclick="selectService('حلاقة VIP', 50)">✨ حلاقة VIP — 50 ريال</div>
-    <div class="service" onclick="selectService('صبغة شعر', 40)">🎨 صبغة شعر — 40 ريال</div>
-    <div class="service" onclick="selectService('تنسيق لحية', 20)">🧔 تنسيق لحية — 20 ريال</div>
-    <div class="service" onclick="selectService('باقة كاملة', 90)">🔥 باقة كاملة — 90 ريال</div>
-
-    <h2>احجز موعدك</h2>
-
-    <label>الاسم</label>
-    <input type="text" id="name">
-
-    <label>رقم الجوال</label>
-    <input type="text" id="phone">
-
-    <label>الخدمة المختارة</label>
-    <input type="text" id="service" readonly placeholder="اختر خدمة من القائمة">
-
-    <label>التاريخ</label>
-    <input type="date" id="date">
-
-    <label>الوقت</label>
-    <select id="time">
-        <option value="">اختر الوقت</option>
-        <option>2:00 PM</option>
-        <option>3:00 PM</option>
-        <option>4:00 PM</option>
-        <option>5:00 PM</option>
-        <option>6:00 PM</option>
-        <option>7:00 PM</option>
-        <option>8:00 PM</option>
-    </select>
-
-    <button onclick="book()">تأكيد الحجز</button>
-
-    <div class="success" id="successMsg">تم تأكيد حجزك بنجاح! 💈</div>
-
+<h2>احجز موعدك</h2>
+<label>الاسم</label>
+<input type="text" id="name">
+<label>رقم الجوال</label>
+<input type="text" id="phone">
+<label>الخدمة المختارة</label>
+<input type="text" id="service" readonly placeholder="اختر خدمة من القائمة">
+<label>التاريخ</label>
+<input type="date" id="date">
+<label>الوقت</label>
+<select id="time">
+<option value="">اختر الوقت</option>
+<option>2:00 PM</option>
+<option>3:00 PM</option>
+<option>4:00 PM</option>
+<option>5:00 PM</option>
+<option>6:00 PM</option>
+<option>7:00 PM</option>
+<option>8:00 PM</option>
+</select>
+<button onclick="book()">تأكيد الحجز</button>
+<div class="success" id="successMsg">تم تأكيد حجزك بنجاح! 💈</div>
 </div>
 
-<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
 <script>
-emailjs.init("JUgXTktPdJchfe-PS");  // Public Key
-
+emailjs.init("JUgXTktPdJchfe-PS"); // Public Key
 let selectedService = "";
-
-// تخزين المواعيد لمنع التكرار
 let bookedAppointments = JSON.parse(localStorage.getItem("bookedAppointments") || "[]");
 
 function selectService(name, price) {
@@ -186,18 +88,17 @@ function book() {
         return;
     }
 
-    // تحقق من تكرار الموعد
+    // منع التكرار
     const exists = bookedAppointments.some(app => app.date === date && app.time === time);
     if (exists) {
         alert("هذا الموعد محجوز مسبقاً، يرجى اختيار وقت آخر.");
         return;
     }
 
-    // إضافة الموعد لمنع التكرار
     bookedAppointments.push({date, time});
     localStorage.setItem("bookedAppointments", JSON.stringify(bookedAppointments));
 
-    // إرسال الإيميل
+    // إرسال البريد
     emailjs.send("service_e73lp4a", "template_p39rn1c", {
         name: name,
         phone: phone,
@@ -206,9 +107,7 @@ function book() {
         time: time
     }).then(function() {
         document.getElementById("successMsg").style.display = "block";
-        setTimeout(() => {
-            document.getElementById("successMsg").style.display = "none";
-        }, 4000);
+        setTimeout(() => { document.getElementById("successMsg").style.display = "none"; }, 4000);
     }, function(error) {
         alert("تعذر إرسال الإيميل: " + JSON.stringify(error));
     });
