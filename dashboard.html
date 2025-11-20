@@ -14,6 +14,24 @@
         text-align: center;
         color: #333;
     }
+    .input-area {
+        width: 95%;
+        margin: 0 auto 20px auto;
+        text-align: center;
+    }
+    .input-area label {
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .input-area input[type="text"] {
+        width: 180px;
+        padding: 7px;
+        font-size: 1em;
+        margin-left: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
     table {
         width: 95%;
         margin: 20px auto;
@@ -64,6 +82,11 @@
 
 <h1>Dashboard تجديد العملاء - الهدف 40%</h1>
 
+<div class="input-area">
+    <label for="first-name">اسم الأول (اكتب بالأرقام أو الحروف):</label>
+    <input type="text" id="first-name" value="محمد العنزي">
+</div>
+
 <table id="dashboard">
     <thead>
         <tr>
@@ -91,6 +114,12 @@ let employees = [
 ];
 
 const tbody = document.querySelector("#dashboard tbody");
+const firstNameInput = document.getElementById("first-name");
+
+firstNameInput.addEventListener("input", () => {
+    employees[0].name = firstNameInput.value;
+    renderTable(); // عند التغيير، ينعكس على أول موظف في الجدول مباشرة
+});
 
 function renderTable() {
     tbody.innerHTML = "";
